@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from PIL import Image,ImageDraw,ImageFont
 import random
+import pylab
 import math, string
 
 class RandomChar():
  @staticmethod
  def Unicode():
   val = random.randint(0x4E00, 0x9FBF)
-  # return unichr(val)
+  return unichr(val)
  @staticmethod
  def GB2312():
   head = random.randint(0xB0, 0xCF)
@@ -15,11 +16,14 @@ class RandomChar():
   tail = random.randint(0, 0xF)
   val = ( head << 8 ) | (body << 4) | tail
   str = "%x" % val
-  return str.decode('hex').decode('gb2312')
+  print(str)
+  # print('result: ' + str.decode('hex').decode('gb2312'))
+  # return str.decode('hex').decode('gb2312')
+  return str
 class ImageChar:
  def __init__(self, fontColor = (0, 0, 0),
            size = (100, 40),
-           fontPath = 'SIMSUN.TTC',
+           fontPath = 'test.ttc',
            bgColor = (255, 255, 255),
            fontSize = 20):
   self.size = size
@@ -28,6 +32,7 @@ class ImageChar:
   self.fontSize = fontSize
   self.fontColor = fontColor
   self.font = ImageFont.truetype(self.fontPath, self.fontSize)
+  self.font = ImageFont.load_default()
   self.image = Image.new('RGB', size, bgColor)
  def rotate(self):
   self.image.rotate(random.randint(0, 30), expand=0)
@@ -50,13 +55,13 @@ class ImageChar:
   start = 0
   for i in range(0, num):
    char = RandomChar().GB2312()
+   # char = RandomChar().Unicode()
    x = start + self.fontSize * i + random.randint(0, gap) + gap * i
-   self.drawText((x, random.randint(-5, 5)), RandomChar().GB2312(), self.randRGB())
+   self.drawText((x, random.randint(100, 300)), char, self.randRGB())
    self.rotate()
   self.randLine(18)
  def save(self, path):
   self.image.save(path)
-if __name__ == "__main":
-    ic = ImageChar(fontColor=(100,211, 90))
-    ic.randChinese(4)
-    ic.save("1.jpeg")
+ic = ImageChar(fontColor=(100,211, 90), size=(1000, 400))
+ic.randChinese(4)
+ic.save("1.jpeg")
