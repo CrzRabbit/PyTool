@@ -1,6 +1,6 @@
-test1 = open('test1', 'r')
+lines = open('functions', 'r')
 jni_interface = list()
-for line in test1.readlines():
+for line in lines.readlines():
     if 'static' == line.split(' ')[0]:
         p1, p2 = line.split('(')
         ret = p1.split(' ')[1]
